@@ -24,7 +24,7 @@ class CreateCompanyRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'symbol' => 'required|string|max:10',
+            'symbol' => 'required|string|unique:companies,symbol|max:10',
             'description' => 'required|string',
             'address' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
