@@ -9,7 +9,6 @@
 
 ## Screenshots
 <hr>
-![Example Image](example.png)
 
 ![Login New User](https://i.ibb.co/wB1qSCW/Screenshot-2024-01-17-at-2-15-54-PM-3.png)
 
