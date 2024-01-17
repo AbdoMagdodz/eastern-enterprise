@@ -27,7 +27,26 @@ services:
         volumes:
             - .:/var/www/html/project
         working_dir: /var/www/html/project
-        command: dump-autoload
+        command: sh -c "composer install"
+
+    migrate&seed:
+        build: ./docker/php
+        volumes:
+            - .:/var/www/html/project
+        working_dir: /var/www/html/project
+        command: sh -c "php artisan migrate && php artisan db:seed"  
+        depends_on:
+            - php
+
+
+    tests:
+        build: ./docker/php
+        volumes:
+            - .:/var/www/html/project
+        working_dir: /var/www/html/project
+        command: sh -c "php artisan test"  
+        depends_on:
+            - php
 
     node:
         container_name: ee-node
@@ -45,7 +64,7 @@ services:
         volumes:
             - .:/var/www/html/project
         working_dir: /var/www/html/project
-        command: sh -c "apk add --no-cache nodejs npm && npm run watch"
+        command: sh -c "apk add --no-cache nodejs npm && npm run dev"
         depends_on:
             - node
 

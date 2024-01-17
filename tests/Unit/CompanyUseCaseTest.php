@@ -7,6 +7,7 @@ use App\Core\Infrastructure\Services\StockServiceInterface;
 use App\Core\UseCases\Company\CompanyUseCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
@@ -37,7 +38,7 @@ class CompanyUseCaseTest extends TestCase
         $companyData = [
             'name' => 'Example Company',
             'symbol' => 'META',
-            'logo' => ,
+            'logo' => UploadedFile::fake()->create('document.png', 1024),
             'description' => 'This is an example company.',
             'address' => '123 Example St, City',
         ];
@@ -49,6 +50,9 @@ class CompanyUseCaseTest extends TestCase
             'name' => 'Example Company',
             'description' => 'This is an example company.',
         ]);
+
+        // Clean up uploaded files after the test
+        Storage::disk('public')->delete('logos/' . $company->logo);
     }
 
     /** @test */
@@ -83,6 +87,8 @@ class CompanyUseCaseTest extends TestCase
         $this->assertInstanceOf(Company::class, $returnedCompanies[1]);
         $this->assertSame($company2->name, $returnedCompanies[0]->name);
         $this->assertSame($company1->name, $returnedCompanies[1]->name);
+        Storage::disk('public')->delete('logos/' . $company1->logo);
+        Storage::disk('public')->delete('logos/' . $company2->logo);
     }
 
     /** @test */
