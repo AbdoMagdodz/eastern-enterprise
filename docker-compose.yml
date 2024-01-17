@@ -29,7 +29,7 @@ services:
         working_dir: /var/www/html/project
         command: sh -c "composer install"
 
-    migrate&seed:
+    migrate-seed:
         build: ./docker/php
         volumes:
             - .:/var/www/html/project
