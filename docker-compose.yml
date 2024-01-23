@@ -93,10 +93,14 @@ services:
         volumes:
             - .:/var/www/html/project
         working_dir: /var/www/html/project
-        command: sh -c "chown -R www-data:www-data storage bootstrap/cache && php artisan storage:link && php artisan migrate && php artisan db:seed"
-        depends_on:
-            - composer
-            - mysql
+        command: sh -c "php artisan migrate && php artisan db:seed"
+
+    storage:
+        build: ./docker/php
+        volumes:
+            - .:/var/www/html/project
+        working_dir: /var/www/html/project
+        command: sh -c "chown -R www-data:www-data storage bootstrap/cache && php artisan storage:link"
 
     tests:
         build: ./docker/php
