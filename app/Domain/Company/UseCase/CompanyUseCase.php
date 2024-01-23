@@ -1,28 +1,26 @@
 <?php
 
-namespace App\Core\UseCases\Company;
+namespace App\Domain\Company\UseCase;
 
-use App\Core\Entities\Company;
-use App\Core\Infrastructure\Services\StockServiceInterface;
+use App\Domain\Company\Entity\Company;
+use App\Domain\Company\Entity\Repositories\CompanyRepositoryInterface;
+use App\Domain\Company\Infrastructure\ExternalServices\AlphavantageStockService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Core\Infrastructure\Repositories\CompanyRepositoryInterface;
 
 class CompanyUseCase
 {
     /**
-     * @param CompanyRepositoryInterface
-     * @param StockServiceInterface
+     * @param CompanyRepositoryInterface $companyRepository
+     * @param AlphavantageStockService $stockService
      */
-    public function __construct(private CompanyRepositoryInterface $companyRepository, private StockServiceInterface $stockService)
+    public function __construct(private readonly CompanyRepositoryInterface $companyRepository, private readonly AlphavantageStockService $stockService)
     {
-        $this->companyRepository = $companyRepository;
-        $this->stockService = $stockService;
+
     }
 
     /**
      * @param array $data
-     * 
      * @return Company
      */
     public function createCompany(array $data): Company
@@ -34,20 +32,21 @@ class CompanyUseCase
         return $this->companyRepository->create($data);
     }
 
+
     /**
-     * @return Company[]
+     * @return array
      */
     public function getAll(): array
     {
         return $this->companyRepository->getAll();
     }
 
+
     /**
      * @param $file
-     * 
      * @return string
      */
-    private function uploadLogo($file)
+    private function uploadLogo($file): string
     {
         $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
 
@@ -56,15 +55,13 @@ class CompanyUseCase
         return $fileName;
     }
 
+
     /**
      * @param string $companySymbol
-     * 
-     * @return array
+     * @return array|null
      */
-    public function getCompanyStockData(string $companySymbol)
+    public function getCompanyStockData(string $companySymbol): array|null
     {
-        $stockData = $this->stockService->getStockData($companySymbol);
-
-        return $stockData;
+        return $this->stockService->getStockData($companySymbol);
     }
 }

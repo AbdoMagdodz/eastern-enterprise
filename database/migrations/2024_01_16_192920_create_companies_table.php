@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('name', 100)->unique()->index();
             $table->string('symbol', 50)->unique()->index();
             $table->string('description', 255);
-            $table->string('address', 255);
+            $table->string('street', 255);
+            $table->string('phone_number', 255);
+            $table->string('postal_code', 50);
+            $table->string('country', 255);
             $table->string('logo', 255);
             $table->timestamps();
         });

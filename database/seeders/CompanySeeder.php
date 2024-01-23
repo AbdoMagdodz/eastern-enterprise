@@ -40,8 +40,11 @@ class CompanySeeder extends Seeder
                 'name' => $details['name'],
                 'logo' => $details['logo'],
                 'symbol' => $symbol,
-                'description' => $faker->text,
-                'address' => $faker->address,
+                'description' => $faker->text(),
+                'street' => $faker->streetName(),
+                'phone_number' => $faker->phoneNumber(),
+                'postal_code' => $faker->postcode(),
+                'country' => $faker->country(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

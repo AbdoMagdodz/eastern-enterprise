@@ -2,39 +2,63 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Domain\Authentication\UseCase\LoginUseCase;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginFormRequest;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected string $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(private readonly LoginUseCase $loginUseCase)
     {
         $this->middleware('guest')->except('logout');
+    }
+
+
+    /**
+     * @return View
+     */
+    public function showLoginForm(): View
+    {
+        return view('auth.login');
+    }
+
+    /**
+     * @param LoginFormRequest $request
+     * @return RedirectResponse
+     */
+    public function login(LoginFormRequest $request): RedirectResponse
+    {
+        $credentials = $request->only('email', 'password');
+
+        if ($this->loginUseCase->login($credentials['email'], $credentials['password'])) {
+            return redirect()->intended($this->redirectTo);
+        }
+
+        return back()->withErrors(['email' => 'Invalid credentials']);
+    }
+
+    /**
+     * @return RedirectResponse
+     */
+    public function logout(): RedirectResponse
+    {
+        $this->loginUseCase->logout();
+
+        return redirect()->route('login');
     }
 }

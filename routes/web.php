@@ -20,6 +20,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::controller(App\Http\Controllers\Auth\LoginController::class)->group(function(){
+    Route::get('login', 'showLoginForm')->name('login');
+    Route::post('login', 'login');
+});
+
 Route::get('companies', [App\Http\Controllers\CompanyController::class, 'index'])->name('companies.index');
 Route::group(
     ['middleware' => 'auth', 'prefix' => 'companies'],

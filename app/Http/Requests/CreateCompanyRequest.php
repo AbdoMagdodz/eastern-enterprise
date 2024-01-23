@@ -26,7 +26,10 @@ class CreateCompanyRequest extends FormRequest
             'name' => 'required|string|max:255',
             'symbol' => 'required|string|unique:companies,symbol|max:10',
             'description' => 'required|string',
-            'address' => 'required|string',
+            'street' => 'required|string|max:15',
+            'phone_number' => 'required|string',
+            'postal_code' => 'required|string|max:15',
+            'country' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }

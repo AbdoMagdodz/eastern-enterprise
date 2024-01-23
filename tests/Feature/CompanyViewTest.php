@@ -44,7 +44,10 @@ class CompanyViewTest extends TestCase
         $company = [
             'name' => 'c',
             'description' => 'This is company A',
-            'address' => '123 Example St, City',
+            'street' => '123 Main St',
+            'country' => 'Country',
+            'postal_code' => '12345',
+            'phone_number' => '1234567890',
             'logo' => 'logo.png',
             'symbol' => 'META',
         ];
@@ -70,9 +73,13 @@ class CompanyViewTest extends TestCase
         $response->assertSee($companyB->name);
         $response->assertSee($companyA->description);
         $response->assertSee($companyB->description);
-        $response->assertSee($companyA->address);
-        $response->assertSee($companyB->address);
+        $response->assertSee($companyA->street);
+        $response->assertSee($companyB->street);
         $response->assertSee($companyA->symbol);
         $response->assertSee($companyB->symbol);
+        $response->assertSee($companyA->postal_code);
+        $response->assertSee($companyB->postal_code);
+        $response->assertSee($companyA->phone_number);
+        $response->assertSee($companyB->phone_number);
     }
 }

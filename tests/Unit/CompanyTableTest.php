@@ -4,6 +4,7 @@ use App\Livewire\Company\CompanyTable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
+use App\Domain\Company\UseCase\CompanyUseCase;
 
 class CompanyTableTest extends TestCase
 {
@@ -12,22 +13,20 @@ class CompanyTableTest extends TestCase
     /** @test */
     public function it_renders_company_table_component()
     {
-        // Arrange: Mock the CompanyUseCase with expectations
-        $companyUseCaseMock = $this->mock(\App\Core\UseCases\Company\CompanyUseCase::class);
+        $companyUseCaseMock = $this->mock(CompanyUseCase::class);
         $companyUseCaseMock->shouldReceive('getAll')->once()->andReturn([]);
 
-        // Act
         Livewire::test(CompanyTable::class)
             ->assertSee('Name')
             ->assertSee('Symbol')
             ->assertSee('Logo')
             ->assertSee('Description')
-            ->assertSee('Address');
+            ->assertSee('Address')
+            ->assertSee('Phone Number')
+            ->assertSee('Postal Code')
+            ->assertSee('Logo')
+            ->assertSee('Action');
 
-        // Assert
-        $companyUseCaseMock->shouldHaveReceived('getAll')->once();
-
-        // Assert
         $companyUseCaseMock->shouldHaveReceived('getAll')->once();
     }
 }

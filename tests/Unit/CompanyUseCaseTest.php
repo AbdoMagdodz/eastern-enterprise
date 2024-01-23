@@ -1,15 +1,14 @@
 <?php
 
-use App\Core\Entities\Company;
-use App\Core\Infrastructure\Repositories\CompanyRepositoryInterface;
-use App\Core\Infrastructure\Services\CloudIEXStockService;
-use App\Core\Infrastructure\Services\StockServiceInterface;
-use App\Core\UseCases\Company\CompanyUseCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\MockObject\MockObject;
+use App\Domain\Company\UseCase\CompanyUseCase;
+use App\Domain\Company\Entity\Repositories\CompanyRepositoryInterface;
+use App\Domain\Company\Infrastructure\ExternalServices\AlphavantageStockService;
 use Tests\TestCase;
+use App\Domain\Company\Entity\Company;
 
 class CompanyUseCaseTest extends TestCase
 {
@@ -17,19 +16,15 @@ class CompanyUseCaseTest extends TestCase
 
     private CompanyUseCase $companyUseCase;
     private CompanyRepositoryInterface $companyRepository;
-    private StockServiceInterface $stockServiceRepository;
-    private StockServiceInterface|MockObject $cloudStockService;
+    private AlphavantageStockService $stockService;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->companyRepository = app(CompanyRepositoryInterface::class);
-        $this->stockServiceRepository = app(StockServiceInterface::class);
-        $this->companyUseCase = new CompanyUseCase($this->companyRepository, $this->stockServiceRepository);
-
-        // Create a mock instance of StockService
-        $this->cloudStockService = $this->createMock(CloudIEXStockService::class);
+        $this->stockService = $this->createMock(AlphavantageStockService::class);
+        $this->companyUseCase = new CompanyUseCase($this->companyRepository, $this->stockService);
     }
 
     /** @test */
@@ -39,6 +34,10 @@ class CompanyUseCaseTest extends TestCase
             'name' => 'Example Company',
             'symbol' => 'META',
             'logo' => UploadedFile::fake()->create('document.png', 1024),
+            'street' => '123 Example St',
+            'country' => 'Country',
+            'postal_code' => '12345',
+            'phone_number' => '1234567890',
             'description' => 'This is an example company.',
             'address' => '123 Example St, City',
         ];
@@ -58,22 +57,27 @@ class CompanyUseCaseTest extends TestCase
     /** @test */
     public function it_should_return_all_companies_successfully()
     {
-        $file = UploadedFile::fake()->create('document.pdf', 1024);
+        $file = UploadedFile::fake()->create('logo.png', 1024);
+        $company = [
+            'logo' => $file,
+            'street' => '123 Example St',
+            'country' => 'Country',
+            'postal_code' => '12345',
+            'phone_number' => '1234567890',
+            'description' => 'This is an example company c1.',
+            'address' => '123 Example St, City',
+        ];
 
         $companyData = [
             [
+                ...$company,
                 'name' => 'c1',
                 'symbol' => 'META',
-                'logo' => $file,
-                'description' => 'This is an example company c1.',
-                'address' => '123 Example St, City',
             ],
             [
+                ...$company,
                 'name' => 'c2',
                 'symbol' => 'APPL',
-                'logo' => $file,
-                'description' => 'This is an example company c2.',
-                'address' => '123 Example St, City',
             ]
         ];
 
@@ -94,11 +98,11 @@ class CompanyUseCaseTest extends TestCase
     /** @test */
     public function it_can_get_company_stock_data()
     {
-        $companyUseCase = new CompanyUseCase($this->companyRepository, $this->cloudStockService);
+        $companyUseCase = new CompanyUseCase($this->companyRepository, $this->stockService);
         $companySymbol = 'AAPL';
         $expectedStockData = ['symbol' => 'AAPL', 'price' => 150.0];
 
-        $this->cloudStockService
+        $this->stockService
             ->expects($this->once())
             ->method('getStockData')
             ->with($companySymbol)
@@ -108,4 +112,5 @@ class CompanyUseCaseTest extends TestCase
 
         $this->assertSame($expectedStockData, $result);
     }
+
 }

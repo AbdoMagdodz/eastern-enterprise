@@ -17,10 +17,13 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
-            'symbol' => $this->faker->word,
-            'description' => $this->faker->text,
-            'address' => $this->faker->address,
+            'name' => $this->faker->name(),
+            'symbol' => $this->faker->word(),
+            'description' => $this->faker->text(),
+            'street' => $this->faker->streetName(),
+            'country' => $this->faker->country(),
+            'postal_code' => $this->faker->postcode(),
+            'phone_number' => $this->faker->phoneNumber(),
             'logo' => $this->faker->imageUrl(),
         ];
     }

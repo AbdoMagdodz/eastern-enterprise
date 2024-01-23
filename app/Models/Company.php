@@ -13,7 +13,10 @@ class Company extends Model
         'name',
         'symbol',
         'description',
-        'address',
+        'street',
+        'postal_code',
+        'country',
+        'phone_number',
         'logo'
     ];
 }

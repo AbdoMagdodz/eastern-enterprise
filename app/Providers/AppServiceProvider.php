@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Core\Infrastructure\Services\StockServiceInterface;
-use App\Core\Infrastructure\Repositories\EloquentCompanyRepository;
-use App\Core\Infrastructure\Repositories\CompanyRepositoryInterface;
-use App\Core\Infrastructure\Services\CloudIEXStockService;
+use App\Domain\Company\Entity\Repositories\CompanyRepositoryInterface;
+use App\Domain\Company\Infrastructure\CompanyRepository;
+use App\Domain\User\Entity\Repositories\UserRepositoryInterface;
+use App\Domain\User\Infrastructure\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,8 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(CompanyRepositoryInterface::class, EloquentCompanyRepository::class);
-        $this->app->bind(StockServiceInterface::class, CloudIEXStockService::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
     }
 
     /**

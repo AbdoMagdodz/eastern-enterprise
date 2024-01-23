@@ -6,6 +6,8 @@
                 <th class="px-4 py-2">Symbol</th>
                 <th class="px-4 py-2">Description</th>
                 <th class="px-4 py-2">Address</th>
+                <th class="px-4 py-2">Phone Number</th>
+                <th class="px-4 py-2">Postal Code</th>
                 <th class="px-4 py-2">Logo</th>
                 <th class="px-4 py-2">Action</th>
             </tr>
@@ -16,7 +18,9 @@
                     <td class="border px-4 py-2">{{ $company->name }}</td>
                     <td class="border px-4 py-2 text-bold">{{ $company->symbol }}</td>
                     <td class="border px-4 py-2">{{ $company->description }}</td>
-                    <td class="border px-4 py-2">{{ $company->address }}</td>
+                    <td class="border px-4 py-2">{{ "$company->street, $company->country" }}</td>
+                    <td class="border px-4 py-2">{{ $company->phoneNumber  }}</td>
+                    <td class="border px-4 py-2">{{ $company->postalCode  }}</td>
                     <td class="border px-4 py-2">
                         <img src="{{ asset('storage/logos/' . $company->logo) }}" alt="{{ $company->name }}"
                             class="rounded" width="100%">

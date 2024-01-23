@@ -46,13 +46,55 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="address" class="block text-gray-700 font-bold mb-2">Address</label>
-                        <input id="address" type="text" value="{{ old('address') }}"
+                        <label for="street" class="block text-gray-700 font-bold mb-2">Street</label>
+                        <input id="street" type="text" value="{{ old('street') }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('address') border-red-500 @enderror"
-                            name="address" required autocomplete="address">
+                            name="street" required autocomplete="street">
 
-                        @error('address')
+                        @error('street')
                             <span class="text-red-500 text-xs italic" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+
+                    <div class="mb-4">
+                        <label for="country" class="block text-gray-700 font-bold mb-2">Country</label>
+                        <input id="country" type="text" value="{{ old('country') }}"
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('address') border-red-500 @enderror"
+                               name="country" required autocomplete="country">
+
+                        @error('country')
+                        <span class="text-red-500 text-xs italic" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="postal_code" class="block text-gray-700 font-bold mb-2">Postal Code</label>
+                        <input id="postal_code" type="text" value="{{ old('postal_code') }}"
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('address') border-red-500 @enderror"
+                               oninput="validateNumbers(this)"
+                               name="postal_code" required autocomplete="postal_code">
+
+                        @error('postal_code')
+                        <span class="text-red-500 text-xs italic" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="phone_number" class="block text-gray-700 font-bold mb-2">Phone Number</label>
+                        <input id="phone_number" type="text" value="{{ old('phone_number') }}"
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('address') border-red-500 @enderror"
+                               oninput="validateNumbers(this)"
+                               name="phone_number" required autocomplete="phone_number">
+
+                        @error('phone_number')
+                        <span class="text-red-500 text-xs italic" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror

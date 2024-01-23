@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y  \
     libwebp-dev \
     libssl-dev \
     pkg-config \
-    autoconf \ 
+    autoconf \
     pkg-config \
     libssl-dev \
     --no-install-recommends

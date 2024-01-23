@@ -27,7 +27,10 @@ class CreateCompanyViewTest extends TestCase
         $response->assertSee('Create Company');
         $response->assertSee('Name');
         $response->assertSee('Symbol');
-        $response->assertSee('Address');
+        $response->assertSee('Street');
+        $response->assertSee('Country');
+        $response->assertSee('Postal Code');
+        $response->assertSee('Phone Number');
         $response->assertSee('Description');
         $response->assertSee('Logo');
         $response->assertSee('Create');
@@ -41,7 +44,7 @@ class CreateCompanyViewTest extends TestCase
 
         $response = $this->get('/companies/create');
 
-        $response->assertStatus(Response::HTTP_OK); 
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */

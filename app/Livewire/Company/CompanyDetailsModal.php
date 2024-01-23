@@ -2,21 +2,34 @@
 
 namespace App\Livewire\Company;
 
+use App\Domain\Company\UseCase\CompanyUseCase;
 use Livewire\Component;
-use App\Core\UseCases\Company\CompanyUseCase;
 use Livewire\Attributes\On;
-
 
 class CompanyDetailsModal extends Component
 {
+    /**
+     * @var CompanyUseCase
+     */
     private CompanyUseCase $companyUseCase;
 
+    /**
+     * @var string
+     */
     public string $companySymbol = '';
 
     /**
-     * @param CompanyUseCase
+     * @param CompanyUseCase $companyUseCase
      */
-    public function boot(CompanyUseCase $companyUseCase)
+    public function boot(CompanyUseCase $companyUseCase): void
+    {
+        $this->companyUseCase = $companyUseCase;
+    }
+
+    /**
+     * @param CompanyUseCase $companyUseCase
+     */
+    public function mount(CompanyUseCase $companyUseCase): void
     {
         $this->companyUseCase = $companyUseCase;
     }
@@ -28,13 +41,15 @@ class CompanyDetailsModal extends Component
     {
         $stockData = $this->companySymbol === '' ? [] : $this->companyUseCase->getCompanyStockData($this->companySymbol);
 
-        return view('livewire.company.company-details-modal', compact('stockData'));
+        $limitExceededMessage = $stockData['Information'] ?? null;
+
+        return view('livewire.company.company-details-modal', compact('stockData', 'limitExceededMessage'));
     }
 
     /**
      * @param string $symbol
      */
-    public function openModal(string $symbol)
+    public function openModal(string $symbol): void
     {
         $this->companySymbol = $symbol;
     }
@@ -44,7 +59,7 @@ class CompanyDetailsModal extends Component
      * @return void
      */
     #[On('showCompanyDetails')]
-    public function showCompanyDetails(string $symbol)
+    public function showCompanyDetails(string $symbol): void
     {
         $this->companySymbol = $symbol;
     }

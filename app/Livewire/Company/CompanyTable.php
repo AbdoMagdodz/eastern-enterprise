@@ -2,23 +2,28 @@
 
 namespace App\Livewire\Company;
 
+use App\Domain\Company\UseCase\CompanyUseCase;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use App\Core\UseCases\Company\CompanyUseCase;
 
 class CompanyTable extends Component
 {
+    /**
+     * @var CompanyUseCase
+     */
     private CompanyUseCase $companyUseCase;
 
     /**
-     * @param CompanyUseCase
+     * @param CompanyUseCase $companyUseCase
+     * @return void
      */
-    public function boot(CompanyUseCase $companyUseCase)
+    public function boot(CompanyUseCase $companyUseCase): void
     {
         $this->companyUseCase = $companyUseCase;
     }
 
     /**
-     * @return view
+     * @return View
      */
     public function render()
     {
@@ -30,9 +35,8 @@ class CompanyTable extends Component
     /**
      * @param string $symbol
      * @return void
-     * @emits showCompanyDetails
      */
-    public function showDetails(string $symbol)
+    public function showDetails(string $symbol): void
     {
         $this->dispatch('showCompanyDetails', symbol: $symbol);
     }
